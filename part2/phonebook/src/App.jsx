@@ -9,18 +9,18 @@ const Person = ({person}) => {
   );  
 }
 
-// const PersonForm = (props) => {
-//   return(
-//     <form onSubmit={props.addName}>
-//         <div>
-//           name: <input value={props.name} onChange={props.handleNewName}/>
-//         </div>
-//         <div>
-//           <button type="submit">add</button>
-//         </div>
-//     </form>
-//   )
-// }
+const PersonForm = (props) => {
+  return(
+    <form onSubmit={props.addName}>
+        <div>
+          name: <input value={props.name} onChange={props.handleNewName}/>
+        </div>
+        <div>
+          <button type="submit">add</button>
+        </div>
+    </form>
+  )
+}
 
 const Filter = (props) => {
   console.log(props);
@@ -61,14 +61,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <form onSubmit={addName}>
-        <div>
-          name: <input value={newName} onChange={handleNewName}/>
-        </div>
-        <div>
-          <button type="submit">add</button>
-        </div>
-      </form>
+      <PersonForm name={newName} handleNewName={handleNewName} addName={addName}/> 
       <h2>Numbers</h2>
       {persons.map( person =>
         <Person key={person.id} person={person} />
