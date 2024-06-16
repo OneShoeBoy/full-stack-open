@@ -22,9 +22,9 @@ const PersonForm = (props) => {
   )
 }
 
-const Filter = (props) => {
-  console.log(props);
-}
+// const Filter = (props) => {
+//   console.log(props);
+// }
 
 const App = () => {
   const [persons, setPersons] = useState([
@@ -61,13 +61,17 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <PersonForm name={newName} handleNewName={handleNewName} addName={addName}/> 
+      <PersonForm
+        name={newName}
+        handleNewName={handleNewName}
+        addName={addName}
+      />
       <h2>Numbers</h2>
-      {persons.map( person =>
+      {persons.map((person) => (
         <Person key={person.id} person={person} />
-      )}
+      ))}
     </div>
-  )
+  );
 }
 
 export default App
