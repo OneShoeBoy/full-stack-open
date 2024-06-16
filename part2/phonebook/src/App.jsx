@@ -22,9 +22,9 @@ const PersonForm = (props) => {
   )
 }
 
-// const Filter = (props) => {
-//   console.log(props);
-// }
+const Filter = (props) => {
+  console.log(props);
+}
 
 const App = () => {
   const [persons, setPersons] = useState([
