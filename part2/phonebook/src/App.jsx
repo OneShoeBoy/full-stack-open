@@ -1,7 +1,6 @@
 import { useState } from 'react'
 
 const Person = ({person}) => {
-  // console.log(person);
   return(
     <div>
       <p>{person.name} {person.phNumber}</p>
@@ -11,9 +10,12 @@ const Person = ({person}) => {
 
 const PersonForm = (props) => {
   return(
-    <form onSubmit={props.addName}>
+    <form onSubmit={props.addPerson}>
         <div>
           name: <input value={props.name} onChange={props.handleNewName}/>
+        </div>
+        <div>
+          number: <input value={props.phone} onChange={props.handleNewNumber}/>
         </div>
         <div>
           <button type="submit">add</button>
@@ -39,39 +41,50 @@ const App = () => {
       id: 2
     }
   ]) 
-  const [newName, setNewName] = useState('')
+  const [newName, setNewName] = useState('');
+  const [newNumber, setNewNumber] = useState('');
 
-  const addName = (event) => {
+
+  const addPerson = (event) => {
     event.preventDefault();
 
     const nameArray = persons.map(person => person.name.toLowerCase());
-    if(nameArray.includes(newName.toLowerCase()) === true){
+    const phoneArray = persons.map(person => person.phNumber);
+    if (
+      nameArray.includes(newName.toLowerCase()) === true ||
+      phoneArray.includes(newNumber) === true
+    ) {
       alert(`${newName} is already added to phonebook!`);
-    }
-    else{
-      const personObject={
+    } else {
+      const personObject = {
         name: newName,
-        phNumber: '',
+        phNumber: newNumber,
         id: persons.length + 1,
       };
-      // console.log(personObject);
       setPersons(persons.concat(personObject));
-      setNewName('');
+      setNewName("");
+      setNewNumber("");
     }
   }
 
   const handleNewName = (event) =>{
     setNewName(event.target.value);
+    
   }
-  // const result = persons.map(person => person.name);
-  // console.log(result);
+
+  const handleNewNumber = (event) =>{
+    setNewNumber(event.target.value);
+  }
+
   return (
     <div>
       <h2>Phonebook</h2>
       <PersonForm
         name={newName}
+        phone={newNumber}
         handleNewName={handleNewName}
-        addName={addName}
+        handleNewNumber={handleNewNumber}
+        addPerson={addPerson}
       />
       <h2>Numbers</h2>
       {persons.map((person) => (
