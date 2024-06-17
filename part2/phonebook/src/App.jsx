@@ -1,7 +1,7 @@
 import { useState } from 'react'
 
 const Person = ({person}) => {
-  console.log(person);
+  // console.log(person);
   return(
     <div>
       <p>{person.name} {person.phNumber}</p>
@@ -43,14 +43,21 @@ const App = () => {
 
   const addName = (event) => {
     event.preventDefault();
-    const personObject={
-      name: newName,
-      phNumber: '',
-      id: persons.length + 1,
-    };
-    console.log(personObject);
-    setPersons(persons.concat(personObject));
-    setNewName('');
+
+    const nameArray = persons.map(person => person.name.toLowerCase());
+    if(nameArray.includes(newName.toLowerCase()) === true){
+      alert(`${newName} is already added to phonebook!`);
+    }
+    else{
+      const personObject={
+        name: newName,
+        phNumber: '',
+        id: persons.length + 1,
+      };
+      // console.log(personObject);
+      setPersons(persons.concat(personObject));
+      setNewName('');
+    }
   }
 
   const handleNewName = (event) =>{
