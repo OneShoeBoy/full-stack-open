@@ -109,7 +109,7 @@ const App = () => {
     <div>
       <h2>Phonebook</h2>
       <Filter nameSearch={nameSearch} handleSearch={handleSearch}/>
-      <h2>Add new</h2>
+      <h3>Add new</h3>
       <PersonForm
         name={newName}
         phone={newNumber}
@@ -117,7 +117,7 @@ const App = () => {
         handleNewNumber={handleNewNumber}
         addPerson={addPerson}
       />
-      <h2>Numbers</h2>
+      <h3>Numbers</h3>
       {persons.map((person) => (
         <Person key={person.id} person={person} nameSearch={nameSearch}/>
       ))}
