@@ -1,11 +1,20 @@
 import { useState } from 'react'
 
-const Person = ({person}) => {
-  return(
-    <div>
-      <p>{person.name} {person.phNumber}</p>
-    </div>
-  );  
+const Person = ({person, nameSearch}) => {
+  if(nameSearch === ''){
+    return(
+      <div>
+        <p>{person.name} {person.phNumber}</p>
+      </div>
+    );  
+  } else if(person.name.toLowerCase().includes(nameSearch.toLowerCase())){
+    return(
+      <div>
+        <p>{person.name} {person.phNumber}</p>
+      </div>
+    )
+  }
+  
 }
 
 const PersonForm = (props) => {
@@ -25,7 +34,11 @@ const PersonForm = (props) => {
 }
 
 const Filter = (props) => {
-  console.log(props);
+  return (
+    <div>
+      Search: <input value={props.nameSearch} onChange={props.handleSearch}/>
+    </div>
+  )
 }
 
 const App = () => {
@@ -39,10 +52,22 @@ const App = () => {
       name: 'Isaac Davidson',
       phNumber: '0422593853',
       id: 2
-    }
+    },
+    {
+      name: 'Amy Shelford',
+      phNumber: '0427957511',
+      id: 3
+    },
+    {
+      name: 'Sam Skinner',
+      phNumber: '0412932932',
+      id: 4
+    },
   ]) 
+
   const [newName, setNewName] = useState('');
   const [newNumber, setNewNumber] = useState('');
+  const [nameSearch, setNameSearch] = useState('');
 
 
   const addPerson = (event) => {
@@ -76,9 +101,15 @@ const App = () => {
     setNewNumber(event.target.value);
   }
 
+  const handleSearch = (event) =>{
+    setNameSearch(event.target.value);
+  }
+
   return (
     <div>
       <h2>Phonebook</h2>
+      <Filter nameSearch={nameSearch} handleSearch={handleSearch}/>
+      <h2>Add new</h2>
       <PersonForm
         name={newName}
         phone={newNumber}
@@ -88,7 +119,7 @@ const App = () => {
       />
       <h2>Numbers</h2>
       {persons.map((person) => (
-        <Person key={person.id} person={person} />
+        <Person key={person.id} person={person} nameSearch={nameSearch}/>
       ))}
     </div>
   );
