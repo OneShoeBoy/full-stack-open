@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import axios from 'axios'
 
 const Person = ({person, nameSearch}) => {
+  console.log(person);
   if(nameSearch === ''){
     return(
       <div>
@@ -54,6 +55,8 @@ const App = () => {
     }))
   }, []);
 
+  console.log(persons);
+
 
   const addPerson = (event) => {
     event.preventDefault();
@@ -71,6 +74,9 @@ const App = () => {
         phNumber: newNumber,
         id: persons.length + 1,
       };
+
+      axios.post('http://localhost:3001/persons', personObject);
+
       setPersons(persons.concat(personObject));
       setNewName("");
       setNewNumber("");
