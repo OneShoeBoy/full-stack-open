@@ -1,18 +1,19 @@
 import { useState, useEffect } from 'react'
-import axios from 'axios'
+import peopleService from './services/people'
 
-const Person = ({person, nameSearch}) => {
-  console.log(person);
+const Person = ({person, nameSearch, deletePerson}) => {
   if(nameSearch === ''){
     return(
       <div>
         <p>{person.name} {person.phNumber}</p>
+        <button type="submit" onClick={deletePerson}>Delete</button>
       </div>
     );  
   } else if(person.name.toLowerCase().includes(nameSearch.toLowerCase())){
     return(
       <div>
         <p>{person.name} {person.phNumber}</p>
+        <button type="submit" onClick={person.deletePerson}>Delete</button>
       </div>
     )
   }
@@ -44,42 +45,50 @@ const Filter = (props) => {
 }
 
 const App = () => {
-  const [persons, setPersons] = useState([]); 
+  const [people, setPeople] = useState([]); 
   const [newName, setNewName] = useState('');
   const [newNumber, setNewNumber] = useState('');
   const [nameSearch, setNameSearch] = useState('');
 
   useEffect(() => {
-    axios.get('http://localhost:3001/persons').then((response => {
-      setPersons(response.data);
-    }))
+    peopleService
+      .getPeople()
+      .then((currentPeople) => setPeople(currentPeople));
   }, []);
-
-  console.log(persons);
-
 
   const addPerson = (event) => {
     event.preventDefault();
-
-    const nameArray = persons.map(person => person.name.toLowerCase());
-    const phoneArray = persons.map(person => person.phNumber);
-    if (
-      nameArray.includes(newName.toLowerCase()) === true ||
-      phoneArray.includes(newNumber) === true
-    ) {
+    const nameArray = people.map(person => person.name.toLowerCase());
+    if (nameArray.includes(newName.toLowerCase()) === true) {
       alert(`${newName} is already added to phonebook!`);
     } else {
       const personObject = {
         name: newName,
         phNumber: newNumber,
-        id: persons.length + 1,
+        id: `${people.length + 1}`
       };
 
-      axios.post('http://localhost:3001/persons', personObject);
+      peopleService
+        .createPerson(personObject)
+        .then((response) => setPeople(people.concat(response)));
 
-      setPersons(persons.concat(personObject));
       setNewName("");
       setNewNumber("");
+    }
+  }
+
+  const deletePerson = (id) => {
+
+    const personToDelete = people.find(person => person.id === id);
+
+    if(window.confirm(`Do you want to delete ${personToDelete.name}?`)){
+      const newPeople = people.filter((person) =>
+        person.id !== id ? person : null
+      );
+
+      peopleService.deletePerson(id).then(
+        setPeople(newPeople)
+      );
     }
   }
 
@@ -109,8 +118,8 @@ const App = () => {
         addPerson={addPerson}
       />
       <h3>Numbers</h3>
-      {persons.map((person) => (
-        <Person key={person.id} person={person} nameSearch={nameSearch}/>
+      {people.map((person) => (
+        <Person key={person.id} person={person} nameSearch={nameSearch} deletePerson={(()=>{deletePerson(person.id)})}/>
       ))}
     </div>
   );
