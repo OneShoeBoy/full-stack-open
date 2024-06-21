@@ -56,33 +56,42 @@ const App = () => {
       .then((currentPeople) => setPeople(currentPeople));
   }, []);
 
-  const updatePerson = (id) => {
-    const personToUpdate = people.find(person => person.id ===id);
-    
-    if(window.confirm(`${personToUpdate.name} is already in the phonebook. Replace old number with a new one?`)){
-      
-      const newPeople = people.filter((person) =>
-        person.id !== id ? person : {...people, phNumber: newNumber})
 
-      peopleService.updatePerson(id, newPeople).then(setPeople(newPeople));
+  const updatePerson = (personToUpdate) => {
+    if (
+      window.confirm(
+        `${personToUpdate.name} is already in the phonebook. Replace old number with a new one?`
+      )
+    ) {
+      const newPhNumber = { ...personToUpdate, phNumber: newNumber };
 
+      peopleService
+        .updatePerson(newPhNumber.id, newPhNumber)
+        .then((returnedPerson) => {
+          setPeople(
+            people.map((person) =>
+              person.id !== newPhNumber.id ? person : returnedPerson
+            )
+          );
+        });
     }
+  };
 
-  }
 
   const addPerson = (event) => {
     event.preventDefault();
     const nameArray = people.map(person => person.name.toLowerCase());
     if (nameArray.includes(newName.toLowerCase()) === true) {
-      alert(`${newName} is already added to phonebook!`);
-    
+      
+      const personToUpdate = people.find(person => person.name === newName);
+
+      updatePerson(personToUpdate);
     
     
     } else {
       const personObject = {
         name: newName,
         phNumber: newNumber,
-        id: `${people.length + 1}`
       };
 
       peopleService
