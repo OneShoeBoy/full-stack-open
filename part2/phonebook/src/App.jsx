@@ -56,11 +56,28 @@ const App = () => {
       .then((currentPeople) => setPeople(currentPeople));
   }, []);
 
+  const updatePerson = (id) => {
+    const personToUpdate = people.find(person => person.id ===id);
+    
+    if(window.confirm(`${personToUpdate.name} is already in the phonebook. Replace old number with a new one?`)){
+      
+      const newPeople = people.filter((person) =>
+        person.id !== id ? person : {...people, phNumber: newNumber})
+
+      peopleService.updatePerson(id, newPeople).then(setPeople(newPeople));
+
+    }
+
+  }
+
   const addPerson = (event) => {
     event.preventDefault();
     const nameArray = people.map(person => person.name.toLowerCase());
     if (nameArray.includes(newName.toLowerCase()) === true) {
       alert(`${newName} is already added to phonebook!`);
+    
+    
+    
     } else {
       const personObject = {
         name: newName,
@@ -92,16 +109,17 @@ const App = () => {
     }
   }
 
-  const handleNewName = (event) =>{
+
+  const handleNewName = (event) => {
     setNewName(event.target.value);
     
   }
 
-  const handleNewNumber = (event) =>{
+  const handleNewNumber = (event) => {
     setNewNumber(event.target.value);
   }
 
-  const handleSearch = (event) =>{
+  const handleSearch = (event) => {
     setNameSearch(event.target.value);
   }
 
