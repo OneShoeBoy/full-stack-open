@@ -6,11 +6,17 @@ import weatherService from "./../services/weatherService";
 
 const Country = ({ country, countrySearch }) => {
   const [weather, setWeather] = useState(null);
+  const [selectedCountry, setSelectedCountry] = useState("");
 
-  if (countrySearch === "") {
+  const handleClick = (event) => {
+    setSelectedCountry(event.target.value);
+  };
+
+  if (countrySearch === "" && selectedCountry === "") {
     return null;
   } else if (
-    country.name.common.toLowerCase() === countrySearch.toLowerCase()
+    country.name.common.toLowerCase() === countrySearch.toLowerCase() ||
+    country.name.common.toLowerCase() === selectedCountry.toLowerCase()
   ) {
     const lat = country.capitalInfo.latlng[0];
     const long = country.capitalInfo.latlng[1];
@@ -41,7 +47,14 @@ const Country = ({ country, countrySearch }) => {
   } else if (
     country.name.common.toLowerCase().includes(countrySearch.toLowerCase())
   ) {
-    return <div>{country.name.common}</div>;
+    return (
+      <div>
+        {country.name.common}
+        <button value={country.name.common} onClick={handleClick}>
+          Submit
+        </button>
+      </div>
+    );
   }
 };
 
